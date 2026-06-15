@@ -2,9 +2,13 @@ const express = require("express");
 const mysql = require("mysql2");
 const dotenv = require("dotenv");
 const path = require("path");
+const cookieParser = require("cookie-parser");
+
 
 dotenv.config({path:'./.env'});
 const app=express();
+
+app.use(cookieParser());
 
 console.log("JWT_SECRET =", process.env.JWT_SECRET);
 

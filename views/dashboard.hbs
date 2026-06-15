@@ -7,7 +7,12 @@
 </head>
 <body>
     <h1>Welcome to dashboard</h1>
-    <p>You are login in my website</p>
+    {{!-- <p>You are login in my website</p> --}}
+    <h1>Welcome {{user.name}}</h1>
+
+    <p>Email: {{user.email}}</p>
+
+    <p>ID: {{user.id}}</p>
     <a href="/login">log out</a>
 </body>
 </html>
