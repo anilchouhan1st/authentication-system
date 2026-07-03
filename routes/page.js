@@ -1,24 +1,13 @@
 const express =require("express");
 const db = require("../db");
+const authController = require("../controllers/auth");
 
 const router=express.Router();
 
-// router.get("/",(req,res)=>{
-//     res.render("index");
-// })
-
-// router.get("/register",(req,res)=>{
-//     res.render("register");
-// })
-
-// router.get('/login', (req, res) => {
-//     res.render('login');
-// });
+const jwt = require("jsonwebtoken");
 
 router.get("/", (req, res) => {
-    res.render("index", {
-        isHome: true
-    });
+    res.redirect("/login");
 });
 
 router.get("/login", (req, res) => {
@@ -33,49 +22,32 @@ router.get("/register", (req, res) => {
     });
 });
 
-router.get("/about", (req, res) => {
-    res.render("about", {
-        isAbout: true
-    });
-});
 
-const jwt = require("jsonwebtoken");
-
-router.get("/dashboard", (req, res) => {
-
-    const token = req.cookies.jwt;
-
-    if (!token) {
-        return res.redirect("/login");
-    }
-
-    const decoded = jwt.verify(
-        token,
-        process.env.JWT_SECRET
-    );
+router.get("/dashboard", authController.protect, (req, res) => {
 
     db.query(
-    "SELECT * FROM records WHERE id = ?",
-    [decoded.id],
-    (error, results) => {
+        "SELECT * FROM users WHERE id = ?",
+        [req.user.id],
+        (error, results) => {
 
-        if (error) {
-            console.log(error);
+            if (error || results.length === 0) {
+                return res.redirect("/login");
+            }
+
+            res.render("dashboard", {
+                user: results[0],
+                isDashboard: true
+            });
         }
+    );
 
-        console.log(results);
-
-       res.render("dashboard", {
-        user: results[0]
-        });
-    }
-);
 });
 
-router.get("/register", (req, res) => {
-    console.log("REGISTER ROUTE HIT");
-    res.render("register", {
-        isRegister: true
-    });
+router.get("/logout", (req, res) => {
+
+    res.clearCookie("jwt");
+
+    res.redirect("/login");
 });
+
 module.exports = router;

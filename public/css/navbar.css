@@ -4,15 +4,6 @@
   font-weight: 100 1000;
 }
 
-/* 
--- Why the @layer ?
-   I misuse the @layer for a good reason. 
-   Since I do a lot of demo featuring #houdini
-   I like to store my @property --foo {} within
-   A @layer so that the viewer can simply fold the layer 
-   And access to the interesting part of the CSS panel.
-*/
-
 @layer properties {
   @property --after-bg-position {
     syntax: "<number>";
@@ -58,11 +49,8 @@
 }
 
 :root {
-  /* -- Colors: */
   --body-bg-color: hsl(221deg 16% 6%);
-  /* -- Background */
   --bg-position: 0;
-  /* -- misc */
   --debug: 0;
   --trs-easing: cubic-bezier(.41, -0.09, .55, 1.09);
   --trs-timing: 300ms;
@@ -73,29 +61,17 @@
 *:before,
 *:after {
   box-sizing: border-box;
-  /* debug */
   outline: calc(var(--debug) * 1px) dashed rgba(255, 0, 0, 0.5);
 }
 
-
 .nav-body {
   width: 100%;
-  /* height: 100%; */
   padding: 0;
   margin: 0;
 }
 
-/* .nav-body {
-  background: var(--body-bg-color);
-  display: grid;
-  place-items: center;
-  font-family: "Mona Sans", sans-serif;
-} */
-
 main {
   width: 100%;
-  /* max-width: 700px; */
-  /* color: white; */
 }
 
 main header {
@@ -140,16 +116,6 @@ main header h2 {
   border-radius: 100px;
   background-position: center center;
   background-image: radial-gradient(ellipse 150px 100px at calc(var(--after-radial-bg-position)*1px) bottom, white 0%, rgba(255, 255, 255, 0.2) 100%);
-  /*
-   &:has(li.active:hover):after {
-    --after-bg-opacity: 50;
-    --after-shadow-offset: 10;
-  }
-  */
-  /* 
-    Some :has() goodness to control the 
-    nav:after border-radius hihihi 
-  */
 }
 
 .nav ul:active {
@@ -227,7 +193,6 @@ main header h2 {
 
 .nav ul li a {
   display: block;
-  /* color: inherit; */
   color: white;
   width: 100%;
   height: 100%;
@@ -257,3 +222,4 @@ main header h2 {
     margin-top: 20px;
     margin-bottom: 20px;
 }
+

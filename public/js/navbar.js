@@ -1,5 +1,6 @@
 console.log("navbar.js loaded");
 console.log(document.querySelector(".nav"));
+
 function inverseMousePosition(element, event) {
   const rect = element.getBoundingClientRect();
   const x = event.clientX - rect.left;
@@ -39,8 +40,8 @@ function handleClick(event) {
 
 const nav = document.querySelector('.nav');
 
-
 const links = nav.querySelectorAll('li a');
+
 for (let i = 0; i < links.length; i++) {
   links[i].addEventListener('click', handleClick);
   links[i].addEventListener("mousemove", (event) => {
@@ -51,21 +52,6 @@ for (let i = 0; i < links.length; i++) {
   });
 }
 
-// ['DOMContentLoaded', 'resize'].map(event => window.addEventListener(event, () => {
-
-//   const { width, left } = links[0].parentNode.getBoundingClientRect();
-//   for (let i = 0; i < links.length; i++) {
-//     links[i].parentNode.classList.remove('active')
-//   }
-
-//   links[0].parentNode.classList.add('active');
-
-//   const offsetLeft = left - nav.getBoundingClientRect().left;
-
-//   nav.style.setProperty('--after-bg-position', offsetLeft);
-//   nav.style.setProperty('--after-radial-bg-position', 0);
-//   nav.style.setProperty('--after-bg-width', width);
-// }));
 window.addEventListener('DOMContentLoaded', () => {
 
     const activeLink = nav.querySelector('li.active a');
@@ -78,12 +64,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const offsetLeft =
         left - nav.getBoundingClientRect().left;
     
-console.log("Active:", activeLink.textContent);
-console.log("Offset:", offsetLeft);
-
     nav.style.setProperty('--after-bg-position', offsetLeft);
     nav.style.setProperty('--after-radial-bg-position', offsetLeft + width / 2);
     nav.style.setProperty('--after-bg-width', width);
-    console.log(nav.querySelector('li.active'));
-
 });
