@@ -1,29 +1,33 @@
 <body class="nav-body">
   <main>
-    {{!-- <header>
-      <h1>THIS IS M TEST NAVBAR</h1>
-    </header>
-     --}}
     <nav class="nav">
   <ul>
-    <li class="{{#if isHome}}active{{/if}}">
-      <a href="/">Home</a>
-    </li>
 
-    <li class="{{#if isAbout}}active{{/if}}">
-      <a href="/about">About</a>
-    </li>
+    {{#if user}}
 
-    <li class="{{#if isLogin}}active{{/if}}">
-      <a href="/login">Login</a>
-    </li>
 
-    <li class="{{#if isRegister}}active{{/if}}">
-      <a href="/register">Register</a>
-    </li>
+        <li class="{{#if isDashboard}}active{{/if}}">
+            <a href="/dashboard">Dashboard</a>
+        </li>
+
+        <li>
+          <a href="/logout">Logout</a>
+        </li>
+
+    {{else}}
+      
+
+        <li class="{{#if isLogin}}active{{/if}}">
+          <a href="/login">Login</a>
+        </li>
+
+        <li class="{{#if isRegister}}active{{/if}}">
+          <a href="/register">Register</a>
+        </li>
+
+    {{/if}}
+
   </ul>
 </nav>
   </main>
-  {{!-- <script src="./script.js"></script> --}}
-
 </body>

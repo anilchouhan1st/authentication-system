@@ -1,22 +1,37 @@
-const mysql = require("mysql2");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 
-const db = mysql.createConnection({
-    host:process.env.DATABASE_HOST,
-    user:process.env.DATABASE_USER,
-    password:process.env.DATABASE_PASSWORD,
-    database:process.env.DATABASE
-});
+const db = require("../db");
 
+exports.protect = (req, res, next) => {
+
+    const token = req.cookies.jwt;
+
+    if (!token) {
+        return res.redirect("/login");
+    }
+
+    try {
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        req.user = decoded;
+
+        next();
+
+    } catch (err) {
+
+        return res.redirect("/login");
+    }
+};
 
 exports.register = (req,res)=>{
     console.log(req.body);
 
     const {name, email , password , Confirm_password } = req.body;
 
-    db.query('select email from records where email = ?',[email], async (error,result) => {
+    db.query('select email from users where email = ?',[email], async (error,result) => {
        if(error){
         console.log(error);
        }
@@ -33,7 +48,7 @@ exports.register = (req,res)=>{
         let hashPassword = await bcrypt.hash(password,8);
         console.log(hashPassword);
 
-        db.query('insert into records set ?',{name: name,email:email ,password: hashPassword},(error,result)=>{
+        db.query('insert into users set ?',{name: name,email:email ,password: hashPassword},(error,result)=>{
             if(error){
                 console.log(error);
             } else{
@@ -52,7 +67,7 @@ exports.login = (req, res) => {
     const { email, password } = req.body;
 
     db.query(
-        "SELECT * FROM records WHERE email = ?",
+        "SELECT * FROM users WHERE email = ?",
         [email],
         async (error, results) => {
 

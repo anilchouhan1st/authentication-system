@@ -1,5 +1,4 @@
 const express = require("express");
-const mysql = require("mysql2");
 const dotenv = require("dotenv");
 const path = require("path");
 const cookieParser = require("cookie-parser");
@@ -7,7 +6,10 @@ const hbs = require("hbs");
 
 
 dotenv.config({path:'./.env'});
+
 const app=express();
+
+const db = require("./db");
 
 app.use(cookieParser());
 
@@ -17,12 +19,6 @@ hbs.registerPartials(
     path.join(__dirname, "views", "partials")
 );
 
-const db = mysql.createConnection({
-    host:process.env.DATABASE_HOST,
-    user:process.env.DATABASE_USER,
-    password:process.env.DATABASE_PASSWORD,
-    database:process.env.DATABASE
-});
 
 const publicDirectory = path.join(__dirname,"./public");
 app.use(express.static(publicDirectory));
@@ -41,24 +37,11 @@ hbs.registerPartials(
     path.join(__dirname, "views", "partials")
 );
 
-db.connect((error)=>{
-    if(error){
-        console.log(error);
-    } else {
-        console.log("Mysql is Connected");
-    }
-});
-
 
 app.use('/',require("./routes/page"));
 app.use('/auth',require('./routes/auth'));
 
-// app.post("/test", (req, res) => {
-
-//     console.log(req.body);
-
-//     res.send("working");
-// });
+app.use(express.static('public'));
 
 app.listen(5000,()=>{
     console.log("server started on port 5000");
