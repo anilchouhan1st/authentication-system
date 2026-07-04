@@ -129,6 +129,10 @@ footer {
     /* padding: 20px; */
 }
 
+.forgot{
+    display: flex;
+    justify-content: space-between;
+}
 
 @media (max-width: 600px) {
     header h1 {
