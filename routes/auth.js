@@ -6,6 +6,7 @@ const router=express.Router();
 
 router.post("/register",authController.register);
 router.post("/login", authController.login);
+router.post("/forgot-password", authController.forgotPassword);
 
 router.get("/test-email", async (req, res) => {
     try {
@@ -27,5 +28,9 @@ router.get("/test-email", async (req, res) => {
 });
 
 router.get("/verify/:token", authController.verifyEmail);
+
+router.get("/reset-password/:token", authController.resetPasswordPage);
+
+router.post("/reset-password/:token", authController.resetPassword);
 
 module.exports = router;
