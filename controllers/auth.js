@@ -156,8 +156,6 @@ exports.register = (req,res)=>{
    
 }
 
-
-
 exports.login = (req, res) => {
     const { email, password } = req.body;
 
@@ -195,8 +193,8 @@ exports.login = (req, res) => {
             if (!user.is_verified) {
             return res.render("login", {
                 message: "Please verify your email before logging in."
-            });
-}
+                });
+            }
 
             console.log(process.env.JWT_SECRET);
 
@@ -218,3 +216,170 @@ exports.login = (req, res) => {
     );
 };
 
+exports.forgotPassword = async (req, res) => {
+
+    const { email } = req.body;
+
+    db.query(
+        "SELECT * FROM users WHERE email = ?",
+        [email],
+        (error, results) => {
+
+            if (error) {
+                console.log(error);
+                return res.send("Database Error");
+            }
+
+            if (results.length === 0) {
+                return res.send("No account found with this email.");
+            }
+            
+            const user = results[0];
+
+            const resetToken = crypto.randomBytes(32).toString("hex");
+
+            const resetExpires = new Date(Date.now() + 60 * 60 * 1000);
+            
+                        db.query(
+                `UPDATE users
+                SET reset_token = ?,
+                    reset_expires = ?
+                WHERE id = ?`,
+                [resetToken, resetExpires, user.id],
+               async (error) => {
+
+                    if (error) {
+                        console.log(error);
+                        return res.send("Database Error");
+                    }
+
+                    const resetLink = `http://localhost:5000/auth/reset-password/${resetToken}`;
+
+                    await transporter.sendMail({
+                        from: '"Authentication System" <no-reply@example.com>',
+                        to: user.email,
+                        subject: "Reset Your Password",
+                        html: `
+                            <h2>Password Reset Request</h2>
+
+                            <p>Hello ${user.name},</p>
+
+                            <p>Click the button below to reset your password.</p>
+
+                            <a href="${resetLink}"
+                            style="
+                                    background:#dc3545;
+                                    color:white;
+                                    padding:12px 20px;
+                                    text-decoration:none;
+                                    border-radius:5px;">
+                                Reset Password
+                            </a>
+
+                            <p>This link expires in 1 hour.</p>
+
+                            <p>If you didn't request a password reset, you can safely ignore this email.</p>
+                        `
+                    });
+
+                    res.send("Password reset email sent successfully.");
+
+                                    }
+                                );
+
+            // res.send(results);
+
+        }
+    );
+
+};
+
+exports.resetPasswordPage = (req, res) => {
+
+    const token = req.params.token;
+
+    db.query(
+        "SELECT * FROM users WHERE reset_token = ?",
+        [token],
+        (error, results) => {
+
+            if (error) {
+                console.log(error);
+                return res.send("Database Error");
+            }
+
+            if (results.length === 0) {
+                return res.send("Invalid reset link.");
+            }
+
+            const user = results[0];
+
+            if (user.reset_expires < new Date()) {
+                return res.send("Reset link has expired.");
+            }
+
+            res.render("reset-password", {
+                token: token
+            });
+
+        }
+    );
+
+};
+
+exports.resetPassword = async (req, res) => {
+
+    const token = req.params.token;
+    const { password, confirmPassword } = req.body;
+
+    if (password !== confirmPassword) {
+        return res.render("reset-password", {
+            token,
+            message: "Passwords do not match."
+        });
+    }
+
+   db.query(
+    "SELECT * FROM users WHERE reset_token = ?",
+    [token],
+    async (error, results) => {
+
+        if (error) {
+            console.log(error);
+            return res.send("Database Error");
+        }
+
+        if (results.length === 0) {
+            return res.send("Invalid reset link.");
+        }
+
+        const user = results[0];
+
+        if (user.reset_expires < new Date()) {
+            return res.send("Reset link has expired.");
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+            db.query(
+            `UPDATE users
+            SET password = ?,
+                reset_token = NULL,
+                reset_expires = NULL
+            WHERE id = ?`,
+            [hashedPassword, user.id],
+            (error) => {
+
+                if (error) {
+                    console.log(error);
+                    return res.send("Database Error");
+                }
+
+                res.redirect("/login");
+
+            }
+        );
+
+    }
+);
+};
