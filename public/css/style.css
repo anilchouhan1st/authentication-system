@@ -21,7 +21,7 @@ main {
     background: linear-gradient(to right,#e2e2e2,#c9d6ff);
 }
 
-.login-page,.register-page {
+.login-page,.register-page,.Forget-password {
     display: flex;
     justify-content: center;
     align-items: center;
