@@ -98,8 +98,12 @@ exports.register = (req,res)=>{
         });
        };
 
+       if (password.length < 8) {
+           return res.render("register", {
+               message: "Password must be at least 8 characters long."
+           });
+       }
         let hashPassword = await bcrypt.hash(password,8);
-        console.log(hashPassword);
         
         const verificationToken = crypto.randomBytes(32).toString("hex");
 
@@ -359,7 +363,15 @@ exports.resetPassword = async (req, res) => {
             return res.send("Reset link has expired.");
         }
 
+        if (password.length < 8) {
+            return res.render("reset-password", {
+                token,
+                message: "Password must be at least 8 characters long."
+            });
+        }
         const hashedPassword = await bcrypt.hash(password, 10);
+
+
 
             db.query(
             `UPDATE users

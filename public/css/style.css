@@ -21,7 +21,7 @@ main {
     background: linear-gradient(to right,#e2e2e2,#c9d6ff);
 }
 
-.login-page,.register-page,.Forget-password {
+.login-page,.register-page,.Forgetpassword-page,.resetpassword-page {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -67,7 +67,7 @@ input,.form-control {
     margin-bottom: 20px;
 }
 
-button {
+button ,.btn{
     width: 100%;
     padding: 12px;
     background: #7494ec;
