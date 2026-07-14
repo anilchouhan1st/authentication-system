@@ -98,11 +98,16 @@ exports.register = (req,res)=>{
         });
        };
 
-       if (password.length < 8) {
-           return res.render("register", {
-               message: "Password must be at least 8 characters long."
-           });
-       }
+         const passwordRegex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+
+        if (!passwordRegex.test(password)) {
+            return res.render("register", {
+                message:
+                "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character."
+            });
+        }
+
         let hashPassword = await bcrypt.hash(password,8);
         
         const verificationToken = crypto.randomBytes(32).toString("hex");
@@ -363,10 +368,13 @@ exports.resetPassword = async (req, res) => {
             return res.send("Reset link has expired.");
         }
 
-        if (password.length < 8) {
+        const passwordRegex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+
+        if (!passwordRegex.test(password)) {
             return res.render("reset-password", {
-                token,
-                message: "Password must be at least 8 characters long."
+                message:
+                "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character."
             });
         }
         const hashedPassword = await bcrypt.hash(password, 10);
