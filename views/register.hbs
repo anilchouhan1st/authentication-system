@@ -24,6 +24,11 @@
         <div class="register-container">
             <div class="form-box" id="register-form">
                 <h2>Register</h2>
+
+                {{#if message}}
+                    <p style="color: red;">{{message}}</p>
+                {{/if}}
+
                 <form class="row g-3" action="/auth/register" method="POST">
 
                     <input type="text" name="name" class="form-control" placeholder="Name">
@@ -39,7 +44,7 @@
         </div>
     </div>
 
-    {{#if message}}
+    {{!-- {{#if message}}
     <div class="toast-container position-fixed top-50 start-50 translate-middle">
         <div id="errorToast" class="toast" role="alert">
             <div class="toast-header">
@@ -50,7 +55,7 @@
                 {{message}}
             </div>
         </div>
-    </div>
+    </div> 
 
     <script>
 
@@ -63,7 +68,7 @@
         });
     </script>
 
-    {{/if}}
+    {{/if}} --}}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
