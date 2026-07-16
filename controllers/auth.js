@@ -47,8 +47,16 @@ exports.verifyEmail = async (req, res) => {
             const user = results[0];
 
         if (user.is_verified) {
-            return res.render("verification-success", {
-                message: "Your email is already verified."
+            // return res.render("verification-success", {
+            //     message: "Your email is already verified."
+            // });
+                return res.render("auth-status", {
+                type: "success",
+                icon: "✔",
+                title: "Email Verified",
+                message: "Your email has been verified successfully.",
+                buttonText: "Login",
+                buttonLink: "/login"
             });
         }
 
@@ -70,7 +78,14 @@ db.query(
             return res.send("Database Error");
         }
 
-        res.render("verification-success");
+        // res.render("verification-success");
+                    res.render("auth-status", {
+            type: "success",
+            title: "🎉Email Verified",
+            message: "Your email has been verified successfully.",
+            buttonText: "Login",
+            buttonLink: "/login"
+        });
     }
 );;
 
@@ -291,7 +306,10 @@ exports.forgotPassword = async (req, res) => {
                         `
                     });
 
-                    res.send("Password reset email sent successfully.");
+                    // res.send("Password reset email sent successfully.");
+                    res.render("reset-email", {
+                        message: "Password reset email sent successfully."
+                    });
 
                                     }
                                 );
