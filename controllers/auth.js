@@ -41,102 +41,109 @@ exports.verifyEmail = async (req, res) => {
             }
 
             if (results.length === 0) {
-               return res.render("verification-failed");
+                return res.render("auth-status", {
+                    type: "error",
+                    title: "❌ Verification Failed",
+                    message: "This verification link is invalid or has expired.",
+                    buttonText: "Register Again",
+                    buttonLink: "/register"
+                });
             }
 
             const user = results[0];
 
-        if (user.is_verified) {
-            // return res.render("verification-success", {
-            //     message: "Your email is already verified."
-            // });
+            if (user.is_verified) {
                 return res.render("auth-status", {
-                type: "success",
-                icon: "✔",
-                title: "Email Verified",
-                message: "Your email has been verified successfully.",
-                buttonText: "Login",
-                buttonLink: "/login"
-            });
-        }
+                    type: "success",
+                    title: "Email Verified",
+                    message: "Your email has been verified successfully.",
+                    buttonText: "Login",
+                    buttonLink: "/login"
+                });
+            }
 
-        if (user.verification_expires < new Date()) {
-            return res.render("verification-failed");
-        }
+            if (user.verification_expires < new Date()) {
+                return res.render("auth-status", {
+                    type: "error",
+                    title: "❌ Verification Failed",
+                    message: "This verification link is invalid or has expired.",
+                    buttonText: "Register again",
+                    buttonLink: "/register"
+                });
+            }
 
-db.query(
-    `UPDATE users
+            db.query(
+                `UPDATE users
      SET is_verified = ?, 
          verification_token = NULL,
          verification_expires = NULL
      WHERE id = ?`,
-    [true, user.id],
-    (error) => {
+                [true, user.id],
+                (error) => {
 
-        if (error) {
-            console.log(error);
-            return res.send("Database Error");
-        }
+                    if (error) {
+                        console.log(error);
+                        return res.send("Database Error");
+                    }
 
-        // res.render("verification-success");
                     res.render("auth-status", {
-            type: "success",
-            title: "🎉Email Verified",
-            message: "Your email has been verified successfully.",
-            buttonText: "Login",
-            buttonLink: "/login"
-        });
-    }
-);;
+                        type: "success",
+                        title: "🎉Email Verified",
+                        message: "Your email has been verified successfully.",
+                        buttonText: "Login Now",
+                        buttonLink: "/login"
+                    });
+                }
+            );;
 
         }
     );
 
 };
 
-exports.register = (req,res)=>{
+exports.register = (req, res) => {
     console.log(req.body);
 
-    const {name, email , password , Confirm_password } = req.body;
+    const { name, email, password, Confirm_password } = req.body;
 
-    db.query('select email from users where email = ?',[email], async (error,result) => {
-       if(error){
-        console.log(error);
-       }
-       if(result.length>0){
-        return res.render("register",{
-            message:'That email is already in use '
-        });
-       } else if( password !== Confirm_password){
-         return res.render("register",{
-            message:'Password does not match '
-        });
-       };
+    db.query('select email from users where email = ?', [email], async (error, result) => {
+        if (error) {
+            console.log(error);
+        }
+        if (result.length > 0) {
+            return res.render("register", {
+                message: 'That email is already in use '
+            });
+        } else if (password !== Confirm_password) {
+            return res.render("register", {
+                message: 'Password does not match '
+            });
+        };
 
-         const passwordRegex =
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+        const passwordRegex =
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
 
         if (!passwordRegex.test(password)) {
             return res.render("register", {
                 message:
-                "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character."
+                    "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character."
             });
         }
 
-        let hashPassword = await bcrypt.hash(password,8);
-        
+        let hashPassword = await bcrypt.hash(password, 8);
+
         const verificationToken = crypto.randomBytes(32).toString("hex");
 
         const verificationExpires = new Date(Date.now() + 60 * 60 * 1000);
 
-            db.query('insert into users set ?', {
+        db.query('insert into users set ?', {
             name: name,
             email: email,
             password: hashPassword,
             is_verified: false,
             verification_token: verificationToken,
             verification_expires: verificationExpires
-            }, async (error, result) => {
+        }, async (error, result) => {
 
             if (error) {
                 console.log(error);
@@ -173,11 +180,11 @@ exports.register = (req,res)=>{
                 });
             }
 
-});
+        });
 
     });
 
-   
+
 }
 
 exports.login = (req, res) => {
@@ -215,8 +222,8 @@ exports.login = (req, res) => {
             }
 
             if (!user.is_verified) {
-            return res.render("login", {
-                message: "Please verify your email before logging in."
+                return res.render("login", {
+                    message: "Please verify your email before logging in."
                 });
             }
 
@@ -257,20 +264,20 @@ exports.forgotPassword = async (req, res) => {
             if (results.length === 0) {
                 return res.send("No account found with this email.");
             }
-            
+
             const user = results[0];
 
             const resetToken = crypto.randomBytes(32).toString("hex");
 
             const resetExpires = new Date(Date.now() + 60 * 60 * 1000);
-            
-                        db.query(
+
+            db.query(
                 `UPDATE users
                 SET reset_token = ?,
                     reset_expires = ?
                 WHERE id = ?`,
                 [resetToken, resetExpires, user.id],
-               async (error) => {
+                async (error) => {
 
                     if (error) {
                         console.log(error);
@@ -306,13 +313,16 @@ exports.forgotPassword = async (req, res) => {
                         `
                     });
 
-                    // res.send("Password reset email sent successfully.");
-                    res.render("reset-email", {
-                        message: "Password reset email sent successfully."
+                    res.render("auth-status", {
+                        type: "info",
+                        title: "📧 Check Your Email",
+                        message: "We've sent you a password reset link.",
+                        buttonText: "Back to Login",
+                        buttonLink: "/login"
                     });
 
-                                    }
-                                );
+                }
+            );
 
             // res.send(results);
 
@@ -336,13 +346,25 @@ exports.resetPasswordPage = (req, res) => {
             }
 
             if (results.length === 0) {
-                return res.send("Invalid reset link.");
+                return res.render("auth-status", {
+                    type: "error",
+                    title: "⚠ Reset Link Expired",
+                    message: "This password reset link is no longer valid.",
+                    buttonText: "Forgot Password",
+                    buttonLink: "/forgot-password"
+                });
             }
 
             const user = results[0];
 
             if (user.reset_expires < new Date()) {
-                return res.send("Reset link has expired.");
+                return res.render("auth-status", {
+                    type: "error",
+                    title: "⚠ Reset Link Expired",
+                    message: "This password reset link is no longer valid.",
+                    buttonText: "Forgot Password",
+                    buttonLink: "/forgot-password"
+                });
             }
 
             res.render("reset-password", {
@@ -366,58 +388,76 @@ exports.resetPassword = async (req, res) => {
         });
     }
 
-   db.query(
-    "SELECT * FROM users WHERE reset_token = ?",
-    [token],
-    async (error, results) => {
+    db.query(
+        "SELECT * FROM users WHERE reset_token = ?",
+        [token],
+        async (error, results) => {
 
-        if (error) {
-            console.log(error);
-            return res.send("Database Error");
-        }
+            if (error) {
+                console.log(error);
+                return res.send("Database Error");
+            }
 
-        if (results.length === 0) {
-            return res.send("Invalid reset link.");
-        }
+            if (results.length === 0) {
+                return res.render("auth-status", {
+                    type: "error",
+                    title: "⚠ Reset Link Expired",
+                    message: "This password reset link is no longer valid.",
+                    buttonText: "Forgot Password",
+                    buttonLink: "/forgot-password"
+                });
+            }
 
-        const user = results[0];
+            const user = results[0];
 
-        if (user.reset_expires < new Date()) {
-            return res.send("Reset link has expired.");
-        }
+            if (user.reset_expires < new Date()) {
+                return res.render("auth-status", {
+                    type: "error",
+                    title: "⚠ Reset Link Expired",
+                    message: "This password reset link is no longer valid.",
+                    buttonText: "Forgot Password",
+                    buttonLink: "/forgot-password"
+                });
+            }
 
-        const passwordRegex =
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+            const passwordRegex =
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
 
-        if (!passwordRegex.test(password)) {
-            return res.render("reset-password", {
-                message:
-                "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character."
-            });
-        }
-        const hashedPassword = await bcrypt.hash(password, 10);
+            if (!passwordRegex.test(password)) {
+                return res.render("reset-password", {
+                    message:
+                        "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character."
+                });
+            }
+            const hashedPassword = await bcrypt.hash(password, 10);
 
 
 
             db.query(
-            `UPDATE users
+                `UPDATE users
             SET password = ?,
                 reset_token = NULL,
                 reset_expires = NULL
             WHERE id = ?`,
-            [hashedPassword, user.id],
-            (error) => {
+                [hashedPassword, user.id],
+                (error) => {
 
-                if (error) {
-                    console.log(error);
-                    return res.send("Database Error");
+                    if (error) {
+                        console.log(error);
+                        return res.send("Database Error");
+                    }
+
+                    res.render("auth-status", {
+                        type: "success",
+                        title: "Password Updated",
+                        message: "🔒 Your password has been updated successfully.",
+                        buttonText: "Go toLogin",
+                        buttonLink: "/login"
+                    });
+
                 }
+            );
 
-                res.redirect("/login");
-
-            }
-        );
-
-    }
-);
+        }
+    );
 };
