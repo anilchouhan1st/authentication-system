@@ -112,7 +112,7 @@ exports.register = (req, res) => {
         }
         if (result.length > 0) {
             return res.render("register", {
-                    toast: {
+                toast: {
                     type: "error",
                     title: "Email Exists",
                     message: "An account with this email already exists."
@@ -120,7 +120,7 @@ exports.register = (req, res) => {
             });
         } else if (password !== Confirm_password) {
             return res.render("register", {
-                    toast: {
+                toast: {
                     type: "error",
                     title: "Error",
                     message: "Passwords do not match."
@@ -137,7 +137,7 @@ exports.register = (req, res) => {
                 toast: {
                     type: "warning",
                     title: "Weak Password",
-                    message: "Password doesn't meet the required criteria."
+                    message: "Password does not meet the required criteria."
                 }
             });
         }
@@ -188,7 +188,11 @@ exports.register = (req, res) => {
                 });
 
                 return res.render("register", {
-                    message: "User registered successfully. Please verify your email."
+                    toast: {
+                        type: "info",
+                        title: "Verification Sent",
+                        message: "Please check your email to verify your account."
+                    }
                 });
             }
 
@@ -210,13 +214,21 @@ exports.login = (req, res) => {
             if (error) {
                 console.log(error);
                 return res.render("login", {
-                    message: "Server Error"
+                    toast: {
+                        type: "error",
+                        title: "Server error",
+                        message: "An error occurred while processing your request. Please try again later."
+                    }
                 });
             }
 
             if (results.length === 0) {
                 return res.render("login", {
-                    message: "Email not found"
+                    toast: {
+                        type: "error",
+                        title: "Error",
+                        message: "No account found with this email."
+                    }
                 });
             }
 
@@ -229,13 +241,21 @@ exports.login = (req, res) => {
 
             if (!isMatch) {
                 return res.render("login", {
-                    message: "Incorrect Password"
+                    toast: {
+                        type: "error",
+                        title: "Error",
+                        message: "Incorrect password."
+                    }
                 });
             }
 
             if (!user.is_verified) {
                 return res.render("login", {
-                    message: "Please verify your email before logging in."
+                    toast: {
+                        type: "error",
+                        title: "Error",
+                        message: "Please verify your email before logging in."
+                    }
                 });
             }
 
@@ -248,11 +268,12 @@ exports.login = (req, res) => {
                 { expiresIn: "1d" }
             );
 
-            console.log("Token:", token);
-
             res.cookie("jwt", token, {
-                httpOnly: true
+                httpOnly: true,
+                sameSite: "Strict",
+                secure: process.env.NODE_ENV === "production"
             });
+
 
             res.redirect("/dashboard");
         }
@@ -274,7 +295,13 @@ exports.forgotPassword = async (req, res) => {
             }
 
             if (results.length === 0) {
-                return res.send("No account found with this email.");
+                return res.render("forgot-password", {
+                    toast: {
+                        type: "error",
+                        title: "Error",
+                        message: "No account found with this email."
+                    }
+                });
             }
 
             const user = results[0];
@@ -395,8 +422,12 @@ exports.resetPassword = async (req, res) => {
 
     if (password !== confirmPassword) {
         return res.render("reset-password", {
-            token,
-            message: "Passwords do not match."
+            token: token,
+            toast: {
+                type: "error",
+                title: "Error",
+                message: "Passwords do not match."
+            }
         });
     }
 
@@ -437,11 +468,16 @@ exports.resetPassword = async (req, res) => {
 
             if (!passwordRegex.test(password)) {
                 return res.render("reset-password", {
-                    message:
-                        "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character."
+                    token: token,
+                    toast: {
+                        type: "warning",
+                        title: "Weak Password",
+                        message: "Password does not meet the required criteria."
+                    }
+
                 });
             }
-            const hashedPassword = await bcrypt.hash(password, 10);
+            const hashedPassword = await bcrypt.hash(password, 8);
 
 
 
@@ -463,7 +499,7 @@ exports.resetPassword = async (req, res) => {
                         type: "success",
                         title: "Password Updated",
                         message: "🔒 Your password has been updated successfully.",
-                        buttonText: "Go toLogin",
+                        buttonText: "Go to Login",
                         buttonLink: "/login"
                     });
 

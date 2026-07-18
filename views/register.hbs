@@ -32,23 +32,21 @@
                     <p style="color: red;">{{message}}</p>
                 {{/if}}
 
-                <form class="row g-3" action="/auth/register" method="POST">
+                <form id="registerForm" class="row g-3" action="/auth/register" method="POST">
 
                     <input type="text" name="name" class="form-control" placeholder="Name">
+
                     <input type="email" name="email" class="form-control" placeholder="Email">
-                    {{!-- <input type="password" name="password" class="form-control" id="password" placeholder="Password"> --}}
+
                     <div class="password-box">
                     <input type="password" id="password" name="password" class="form-control" placeholder="Password">
                     <i class="fa-regular fa-eye toggle-password" data-target="password"></i>
-
                     </div>
 
                     <div class="password-box">
                         <input type="password" id="confirm-password" name="Confirm_password" class="form-control" placeholder="Confirm password">
                         <i class="fa-regular fa-eye toggle-password" data-target="confirm-password"></i>
                     </div>
-
-                {{!-- <input type="password" name="password" id="password" class="form-control" placeholder="Password"> --}}
 
                 <div id="password-rules" class="password-rules">
                     <h6>Password Requirements</h6>

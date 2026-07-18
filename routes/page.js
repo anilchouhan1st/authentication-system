@@ -46,6 +46,17 @@ router.get("/dashboard", authController.protect, (req, res) => {
         }
     );
 
+    router.get("/dashboard", (req, res) => {
+
+    const toast = req.session.toast;
+    delete req.session.toast;   // Show only once
+
+    res.render("dashboard", {
+        user,
+        toast
+    });
+});
+
 });
 
 router.get("/logout", (req, res) => {
