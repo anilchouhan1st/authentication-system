@@ -13,8 +13,6 @@ const db = require("./db");
 
 app.use(cookieParser());
 
-console.log("JWT_SECRET =", process.env.JWT_SECRET);
-
 hbs.registerPartials(
     path.join(__dirname, "views", "partials")
 );
@@ -33,16 +31,17 @@ app.disable('view cache');
 app.set('view cache', false);
 
 app.set("views", path.join(__dirname, "views"));
-hbs.registerPartials(
-    path.join(__dirname, "views", "partials")
-);
-
 
 app.use('/',require("./routes/page"));
 app.use('/auth',require('./routes/auth'));
 
-app.use(express.static('public'));
+const helmet = require("helmet");
+app.use(helmet());
 
-app.listen(5000,()=>{
-    console.log("server started on port 5000");
+// app.use(express.static('public'));
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
