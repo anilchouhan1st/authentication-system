@@ -112,11 +112,19 @@ exports.register = (req, res) => {
         }
         if (result.length > 0) {
             return res.render("register", {
-                message: 'That email is already in use '
+                    toast: {
+                    type: "error",
+                    title: "Email Exists",
+                    message: "An account with this email already exists."
+                }
             });
         } else if (password !== Confirm_password) {
             return res.render("register", {
-                message: 'Password does not match '
+                    toast: {
+                    type: "error",
+                    title: "Error",
+                    message: "Passwords do not match."
+                }
             });
         };
 
@@ -125,8 +133,12 @@ exports.register = (req, res) => {
 
         if (!passwordRegex.test(password)) {
             return res.render("register", {
-                message:
-                    "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character."
+
+                toast: {
+                    type: "warning",
+                    title: "Weak Password",
+                    message: "Password doesn't meet the required criteria."
+                }
             });
         }
 
