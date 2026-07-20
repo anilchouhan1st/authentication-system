@@ -21,7 +21,7 @@ main {
     background: linear-gradient(to right,#e2e2e2,#c9d6ff);
 }
 
-.login-page,.register-page,.Forgetpassword-page,.resetpassword-page {
+.login-page,.register-page,.Forgetpassword-page,.resetpassword-page,.card-design {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -49,8 +49,8 @@ main {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-h1,h2 {
-    font-size: 34px;
+h1,h2,h3,h4,h5,h6 {
+    /* font-size: 34px; */
     text-align: center;
     margin: 20px;
 }
