@@ -39,23 +39,23 @@ router.get("/dashboard", authController.protect, (req, res) => {
                 return res.redirect("/login");
             }
 
+            let toast = null;
+
+            if (req.query.welcome === "true") {
+                toast = {
+                    type: "success",
+                    title: "Login Successful",
+                    message: `Welcome back, ${results[0].name}!`
+                };
+            }
+
             res.render("dashboard", {
                 user: results[0],
-                isDashboard: true
+                isDashboard: true,
+                toast
             });
         }
     );
-
-    router.get("/dashboard", (req, res) => {
-
-    const toast = req.session.toast;
-    delete req.session.toast;   // Show only once
-
-    res.render("dashboard", {
-        user,
-        toast
-    });
-});
 
 });
 

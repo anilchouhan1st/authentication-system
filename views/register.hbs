@@ -60,7 +60,8 @@
 
                     <p>Already have an account? <a href="/login">Login</a></p>
 
-                    <button type="submit">Sign In</button>
+                    <button id="registerBtn" type="submit">Register</button>
+
                 </form>
             </div>
         </div>
@@ -72,6 +73,16 @@
     <script src="/js/toast.js"></script>
     <script src="/js/password-validation.js"></script>
     <script src="/js/password-toggle.js"></script>
+    <script src="/js/form-loader.js"></script>
+
+    <script>
+    setupLoadingButton(
+        "registerForm",
+        "registerBtn",
+        "Creating Account..."
+    );
+    </script>
+
 </body>
 
 </html>

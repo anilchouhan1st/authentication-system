@@ -275,7 +275,8 @@ exports.login = (req, res) => {
             });
 
 
-            res.redirect("/dashboard");
+            // res.redirect("/dashboard");
+            res.redirect("/dashboard?welcome=true");
         }
     );
 };
