@@ -1,6 +1,3 @@
-<!DOCTYPE html>
-<html>
-
 <head>
     <title>{{title}}</title>
 </head>
@@ -17,24 +14,17 @@
 
     <div class="card-design">
         <div class="card-design-container">
-            <div class="form-box" id="{{type}}-form">
+            <div class="form-box" id="404-form">
 
-                <div class="status-icon {{type}}">
-                    {{icon}}
-                </div>
+                 <h1><i class="fa-solid fa-triangle-exclamation"></i> {{title}}</h1>
 
-                <h1>{{title}}</h1>
+                <h5>Oops! Page Not Found </h5>
 
-                <p>{{message}}</p>
+                <p>The page you are looking for doesn't exist or has been moved.</p>
 
-
-                <a href="{{buttonLink}}" class="btn btn-primary">
-                    {{buttonText}}
+                <a href="/" class="btn btn-primary">
+                    Go Home
                 </a>
-
-                {{!-- <a href="{{buttonLink}}" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
-                    {{buttonText}}
-                </a> --}}
 
             </div>
         </div>

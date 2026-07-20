@@ -41,7 +41,7 @@ exports.verifyEmail = async (req, res) => {
             }
 
             if (results.length === 0) {
-                return res.render("auth-status", {
+                return res.render("auth-status", {                    
                     type: "error",
                     title: "❌ Verification Failed",
                     message: "This verification link is invalid or has expired.",
