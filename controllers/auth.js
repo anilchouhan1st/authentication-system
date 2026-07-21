@@ -162,7 +162,7 @@ exports.register = (req, res) => {
             } else {
                 console.log(result);
 
-                const verificationLink = `http://localhost:5000/auth/verify/${verificationToken}`;
+                const verificationLink =`${process.env.BASE_URL}/auth/verify/${verificationToken}`;
 
                 await transporter.sendMail({
                     from: '"Authentication System" <no-reply@example.com>',
@@ -322,7 +322,7 @@ exports.forgotPassword = async (req, res) => {
                         return res.send("Database Error");
                     }
 
-                    const resetLink = `http://localhost:5000/auth/reset-password/${resetToken}`;
+                    const resetLink = `${process.env.BASE_URL}/auth/reset-password/${resetToken}`;
 
                     await transporter.sendMail({
                         from: '"Authentication System" <no-reply@example.com>',
