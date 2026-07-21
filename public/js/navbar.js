@@ -1,6 +1,3 @@
-console.log("navbar.js loaded");
-console.log(document.querySelector(".nav"));
-
 function inverseMousePosition(element, event) {
   const rect = element.getBoundingClientRect();
   const x = event.clientX - rect.left;

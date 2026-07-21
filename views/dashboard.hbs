@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 
-<body>
+<body class="dashboard-body">
 
     <div class="nav-wrapper">
         <nav class="nav">
@@ -26,24 +26,158 @@
         </nav>
     </div>
 
-    <div class="dashbord-container">
-        <h1>Welcome {{user.name}}</h1>
-    </div>
-
-    <div class="profile-header text-center">
-        <img src="/images/Myprofile.jpg" alt="profile" class="profile-image">
-    </div>
-
-        <div class="card-design">
-            <div class="card-design-container">
-                <div class="form-box" id="{{type}}-form">
-                    <h2>{{user.name}}</h2>
-                    <h4>Software Engineer</h4>
-                    <p>Email: {{user.email}}</p>
-                    <p>ID: {{user.id}}</p>
+    <main class="dashboard-page">
+        <div class="dashboard-shell">
+            <header class="dashboard-hero">
+                <div class="hero-copy">
+                    <span class="hero-eyebrow"><i class="fa-solid fa-shield-halved"></i> Secure workspace</span>
+                    <h1>Welcome back, {{user.name}} <span class="wave">👋</span></h1>
+                    <p>Manage your account and security settings securely.</p>
                 </div>
-            </div>
+
+                <div class="hero-illustration" aria-hidden="true">
+                    <div class="hero-card">
+                        <div class="hero-avatar">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div class="hero-meta">
+                            <span class="meta-label">Today</span>
+                            <strong id="dashboardDate">—</strong>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <section class="dashboard-grid">
+                <article class="dashboard-card card-account">
+                    <div class="card-heading">
+                        <div class="card-icon blue">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div>
+                            <h2>Account information</h2>
+                            <p>Keep your profile details up to date.</p>
+                        </div>
+                    </div>
+
+                    <div class="info-list">
+                        <div class="info-row">
+                            <span class="info-label"><i class="fa-solid fa-user"></i> Name</span>
+                            <span class="info-value">{{user.name}}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label"><i class="fa-solid fa-envelope"></i> Email</span>
+                            <span class="info-value">{{user.email}}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label"><i class="fa-solid fa-calendar-days"></i> Member since</span>
+                            <span class="info-value">{{user.created_at}}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label"><i class="fa-solid fa-circle-check"></i> Verification</span>
+                            <span class="info-value">
+                                {{#if user.is_verified}}
+                                    <span class="pill pill-success">Verified</span>
+                                {{else}}
+                                    <span class="pill pill-warning">Pending</span>
+                                {{/if}}
+                            </span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="dashboard-card card-security">
+                    <div class="card-heading">
+                        <div class="card-icon green">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <div>
+                            <h2>Security status</h2>
+                            <p>Your account stays protected at all times.</p>
+                        </div>
+                    </div>
+
+                    <div class="status-list">
+                        <div class="status-item">
+                            <span class="status-badge"><i class="fa-solid fa-check"></i></span>
+                            <span>JWT authentication enabled</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-badge"><i class="fa-solid fa-check"></i></span>
+                            <span>Password protected</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-badge"><i class="fa-solid fa-check"></i></span>
+                            <span>Email verified</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-badge"><i class="fa-solid fa-clock"></i></span>
+                            <span>Last login active now</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="dashboard-card card-actions">
+                    <div class="card-heading">
+                        <div class="card-icon amber">
+                            <i class="fa-solid fa-bolt"></i>
+                        </div>
+                        <div>
+                            <h2>Quick actions</h2>
+                            <p>Manage access in a few clicks.</p>
+                        </div>
+                    </div>
+                    <div class="action-group">
+                        <a href="/forgot-password" class="action-btn action-btn-primary">
+                            <span><i class="fa-solid fa-lock"></i> Change password</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <a href="/logout" class="action-btn action-btn-secondary">
+                            <span><i class="fa-solid fa-right-from-bracket"></i> Logout</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="dashboard-card card-stats">
+                    <div class="card-heading">
+                        <div class="card-icon violet">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <div>
+                            <h2>Account status</h2>
+                            <p>A lightweight overview of your session.</p>
+                        </div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-pill">
+                            <span class="stat-label">Verified</span>
+                            <strong>
+                                {{#if user.is_verified}}
+                                    Yes
+                                {{else}}
+                                    Pending
+                                {{/if}}
+                            </strong>
+                        </div>
+                        <div class="stat-pill">
+                            <span class="stat-label">Protected</span>
+                            <strong>Yes</strong>
+                        </div>
+                        <div class="stat-pill">
+                            <span class="stat-label">Member since</span>
+                            <strong>{{user.created_at}}</strong>
+                        </div>
+                        <div class="stat-pill">
+                            <span class="stat-label">Method</span>
+                            <strong>JWT</strong>
+                        </div>
+                    </div>
+                </article>
+            </section>
         </div>
+    </main>
 
     {{> toast}}
 
@@ -51,6 +185,17 @@
     <script src="/js/navbar.js"></script>
 
     <script>
+        const dashboardDate = document.getElementById("dashboardDate");
+        if (dashboardDate) {
+            const today = new Date();
+            dashboardDate.textContent = today.toLocaleDateString("en", {
+                weekday: "short",
+                month: "short",
+                day: "numeric",
+                year: "numeric"
+            });
+        }
+
         if (window.location.search.includes("welcome=true")) {
             window.history.replaceState({}, document.title, "/dashboard");
         }
