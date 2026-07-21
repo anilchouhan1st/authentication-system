@@ -1,3 +1,16 @@
+// const nodemailer = require("nodemailer");
+
+// const transporter = nodemailer.createTransport({
+//     service: "gmail",
+//     auth: {
+//         user: process.env.EMAIL_USER,
+//         pass: process.env.EMAIL_PASS
+//     }
+// });
+
+const dns = require("dns");
+dns.setDefaultResultOrder("ipv4first");
+
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
@@ -7,6 +20,8 @@ const transporter = nodemailer.createTransport({
         pass: process.env.EMAIL_PASS
     }
 });
+
+// module.exports = transporter;
 
 transporter.verify((error, success) => {
     if (error) {
