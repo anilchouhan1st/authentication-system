@@ -102,7 +102,7 @@ exports.verifyEmail = async (req, res) => {
 };
 
 exports.register = (req, res) => {
-    console.log(req.body);
+    
 
     const { name, email, password, Confirm_password } = req.body;
 
@@ -258,8 +258,6 @@ exports.login = (req, res) => {
                     }
                 });
             }
-
-            console.log(process.env.JWT_SECRET);
 
             // Generate JWT Token
             const token = jwt.sign(
