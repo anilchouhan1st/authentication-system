@@ -164,8 +164,10 @@ exports.register = (req, res) => {
 
                 const verificationLink =`${process.env.BASE_URL}/auth/verify/${verificationToken}`;
 
+                console.log("About to send email...");
+
                 await transporter.sendMail({
-                    from: '"Authentication System" <no-reply@example.com>',
+                    from: process.env.EMAIL_FROM,
                     to: email,
                     subject: "Verify Your Email",
                     html: `
@@ -186,6 +188,10 @@ exports.register = (req, res) => {
                         <p>This link expires in 1 hour.</p>
                     `
                 });
+
+                
+
+console.log("Email sent successfully.");
 
                 return res.render("register", {
                     toast: {
@@ -325,7 +331,7 @@ exports.forgotPassword = async (req, res) => {
                     const resetLink = `${process.env.BASE_URL}/auth/reset-password/${resetToken}`;
 
                     await transporter.sendMail({
-                        from: '"Authentication System" <no-reply@example.com>',
+                        from: process.env.EMAIL_FROM,
                         to: user.email,
                         subject: "Reset Your Password",
                         html: `
