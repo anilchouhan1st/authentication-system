@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const db = require("../db");
 const transporter = require("../config/mail");
+// const resend = require("../config/mail");
 
 exports.protect = (req, res, next) => {
 
@@ -166,11 +167,14 @@ exports.register = (req, res) => {
 
                 console.log("About to send email...");
 
-                await transporter.sendMail({
-                    from: process.env.EMAIL_FROM,
-                    to: email,
-                    subject: "Verify Your Email",
-                    html: `
+                // await resend.emails.send({
+                try {
+                    await transporter.sendMail({
+                        from: process.env.EMAIL_FROM,
+                        to: email,
+                        // to: "anilchouhan.dev@gmail.com",
+                        subject: "Verify Your Email",
+                        html: `
                         <h2>Welcome ${name}!</h2>
                         <p>Thank you for registering.</p>
                         <p>Please click the button below to verify your email.</p>
@@ -188,6 +192,9 @@ exports.register = (req, res) => {
                         <p>This link expires in 1 hour.</p>
                     `
                 });
+            } catch (error) {
+                console.error("Email send failed:", error);
+            }
 
                 
 
@@ -330,11 +337,12 @@ exports.forgotPassword = async (req, res) => {
 
                     const resetLink = `${process.env.BASE_URL}/auth/reset-password/${resetToken}`;
 
-                    await transporter.sendMail({
-                        from: process.env.EMAIL_FROM,
-                        to: user.email,
-                        subject: "Reset Your Password",
-                        html: `
+                    try {
+                        await transporter.sendMail({
+                            from: process.env.EMAIL_FROM,
+                            to: user.email,
+                            subject: "Reset Your Password",
+                            html: `
                             <h2>Password Reset Request</h2>
 
                             <p>Hello ${user.name},</p>
@@ -365,8 +373,10 @@ exports.forgotPassword = async (req, res) => {
                         buttonLink: "/login"
                     });
 
+                } catch (error) {
+                    console.error("Email send failed:", error);
                 }
-            );
+            });
 
             // res.send(results);
 
