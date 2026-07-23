@@ -165,8 +165,6 @@ exports.register = (req, res) => {
 
                 const verificationLink =`${process.env.BASE_URL}/auth/verify/${verificationToken}`;
 
-                console.log("About to send email...");
-
                 // await resend.emails.send({
                 try {
                     await transporter.sendMail({
@@ -195,10 +193,6 @@ exports.register = (req, res) => {
             } catch (error) {
                 console.error("Email send failed:", error);
             }
-
-                
-
-console.log("Email sent successfully.");
 
                 return res.render("register", {
                     toast: {
@@ -518,6 +512,193 @@ exports.resetPassword = async (req, res) => {
                         buttonLink: "/login"
                     });
 
+                }
+            );
+
+        }
+    );
+};
+
+exports.changePasswordPage = (req, res) => {
+    res.render("change-password", {
+        title: "Change Password"
+    });
+};
+
+// exports.changePassword = async (req, res) => {
+
+//     try{
+//         const { currentPassword, password, confirmPassword } = req.body;
+
+//     if (password !== confirmPassword) {
+//         return res.render("change-password", {
+//             toast: {
+//                     type: "error",
+//                     title: "Error",
+//                     message: "Passwords do not match."
+//                 }
+//         });
+//     }
+
+//     const [rows] = await db.query(
+//         "SELECT password FROM users WHERE id = ?",
+//         [req.user.id]
+//     );
+
+//     const user = rows[0];
+
+//     const match = await bcrypt.compare(
+//         currentPassword,
+//         user.password
+//     );
+
+//     if (!match) {
+//         return res.render("change-password", {
+//             toast: {
+//                         type: "error",
+//                         title: "Error",
+//                         message: "Current password is incorrect"
+//                     }
+//         });
+//     }
+    
+//     const passwordRegex =
+//             /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+
+//         if (!passwordRegex.test(password)) {
+//             return res.render("change-password", {
+
+//                 toast: {
+//                     type: "warning",
+//                     title: "Weak Password",
+//                     message: "Password does not meet the required criteria."
+//                 }
+//             });
+//         }
+
+//     const samePassword = await bcrypt.compare(password, user.password);
+
+//     if (samePassword) {
+//         return res.render("change-password", {
+//         toast: {
+//             type: "warning",
+//             title: "Same Password",
+//             message: "New password must be different from your current password."
+//         }
+//         });
+//     }
+
+//     const hashedPassword = await bcrypt.hash(password, 8);
+
+//     await db.query(
+//         "UPDATE users SET password = ? WHERE id = ?",
+//         [hashedPassword, req.user.id]
+//     );
+
+//     res.redirect("/dashboard");
+//     } catch (err) {
+//         console.error(err);
+
+//         return res.render("change-password", {
+//             toast: {
+//                 type: "error",
+//                 title: "Server Error",
+//                 message: "Something went wrong. Please try again."
+//             }
+//         });
+//     }
+// };
+exports.changePassword = (req, res) => {
+    const { currentPassword, password, confirmPassword } = req.body;
+
+    if (password !== confirmPassword) {
+        return res.render("change-password", {
+            toast: {
+                type: "error",
+                title: "Error",
+                message: "Passwords do not match."
+            }
+        });
+    }
+
+    const passwordRegex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+
+    if (!passwordRegex.test(password)) {
+        return res.render("change-password", {
+            toast: {
+                type: "warning",
+                title: "Weak Password",
+                message: "Password does not meet the required criteria."
+            }
+        });
+    }
+
+    db.query(
+        "SELECT password FROM users WHERE id = ?",
+        [req.user.id],
+        async (err, results) => {
+
+            if (err) {
+                console.error(err);
+                return res.render("change-password", {
+                    toast: {
+                        type: "error",
+                        title: "Database Error",
+                        message: "Something went wrong."
+                    }
+                });
+            }
+
+            if (results.length === 0) {
+                return res.redirect("/login");
+            }
+
+            const user = results[0];
+
+            const match = await bcrypt.compare(currentPassword, user.password);
+
+            if (!match) {
+                return res.render("change-password", {
+                    toast: {
+                        type: "error",
+                        title: "Error",
+                        message: "Current password is incorrect."
+                    }
+                });
+            }
+
+            const samePassword = await bcrypt.compare(password, user.password);
+
+            if (samePassword) {
+                return res.render("change-password", {
+                    toast: {
+                        type: "warning",
+                        title: "Same Password",
+                        message: "New password must be different from your current password."
+                    }
+                });
+            }
+
+            const hashedPassword = await bcrypt.hash(password, 8);
+
+            db.query(
+                "UPDATE users SET password = ? WHERE id = ?",
+                [hashedPassword, req.user.id],
+                (err) => {
+
+                    if (err) {
+                        console.error(err);
+                        return res.render("change-password", {
+                            toast: {
+                                type: "error",
+                                title: "Database Error",
+                                message: "Failed to update password."
+                            }
+                        });
+                    }
+
+                   return res.redirect("/dashboard?passwordChanged=true");
                 }
             );
 
