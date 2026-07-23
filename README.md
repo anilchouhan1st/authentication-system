@@ -6,7 +6,7 @@ A secure full-stack authentication system built with **Node.js, Express.js, MySQ
 
 ## 🌐 Live Demo
 
-🔗 **Live Website:** https://authentication-system-00hc.onrender.comhttps://YOUR-LIVE-LINK
+🔗 **Live Website:** https://authentication-system-00hc.onrender.com
 
 ---
 
