@@ -48,6 +48,14 @@ router.get("/dashboard", authController.protect, (req, res) => {
                     message: `Welcome back, ${results[0].name}!`
                 };
             }
+            
+            if (req.query.passwordChanged === "true") {
+                toast = {
+                    type: "success",
+                    title: "Success",
+                    message: "Password changed successfully!"
+                };
+            }
 
             res.render("dashboard", {
                 user: results[0],

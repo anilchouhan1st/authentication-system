@@ -5,7 +5,7 @@ const { loginLimiter } = require("../middleware/rateLimiter");
 const router=express.Router();
 
 router.post("/register",authController.register);
-router.post("/login", authController.login);
+
 router.post("/forgot-password", authController.forgotPassword);
 
 router.get("/verify/:token", authController.verifyEmail);
@@ -16,6 +16,12 @@ router.post("/reset-password/:token", authController.resetPassword);
 
 router.post("/login", loginLimiter, authController.login);
 
-module.exports = router;
+// router.get("/change-password", protect, authController.changePasswordPage);
+
+// router.post("/change-password", protect, authController.changePassword);
+
+router.get("/change-password", authController.protect, authController.changePasswordPage);
+
+router.post("/change-password", authController.protect, authController.changePassword);
 
 module.exports = router;
