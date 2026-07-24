@@ -5,16 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="https://public.codepenassets.com/css/normalize-5.0.0.min.css">
     <link rel="icon" href="/images/A.png">
     <link rel="stylesheet" href="/css/navbar.css">
     <link rel="stylesheet" href="/css/style.css">
-
     <link rel="stylesheet" href="/css/toast.css">
-    {{!--
-    <link rel="stylesheet" href="/css/password.css"> --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 
@@ -77,9 +75,9 @@
                             <span class="info-label"><i class="fa-solid fa-circle-check"></i> Verification</span>
                             <span class="info-value">
                                 {{#if user.is_verified}}
-                                    <span class="pill pill-success">Verified</span>
+                                <span class="pill pill-success">Verified</span>
                                 {{else}}
-                                    <span class="pill pill-warning">Pending</span>
+                                <span class="pill pill-warning">Pending</span>
                                 {{/if}}
                             </span>
                         </div>
@@ -155,9 +153,9 @@
                             <span class="stat-label">Verified</span>
                             <strong>
                                 {{#if user.is_verified}}
-                                    Yes
+                                Yes
                                 {{else}}
-                                    Pending
+                                Pending
                                 {{/if}}
                             </strong>
                         </div>

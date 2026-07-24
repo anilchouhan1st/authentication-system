@@ -5,15 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
- 
+
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/navbar.css">
-   <link rel="icon" href="/images/A.png">
-
     <link rel="stylesheet" href="/css/toast.css">
     <link rel="stylesheet" href="/css/password.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    </head>
+    <link rel="icon" href="/images/A.png">
+</head>
 
 <body class="register-body">
 
@@ -29,7 +28,7 @@
                 <h2>Register</h2>
 
                 {{#if message}}
-                    <p style="color: red;">{{message}}</p>
+                <p style="color: red;">{{message}}</p>
                 {{/if}}
 
                 <form id="registerForm" class="row g-3" action="/auth/register" method="POST">
@@ -39,24 +38,26 @@
                     <input type="email" name="email" class="form-control" placeholder="Email">
 
                     <div class="password-box">
-                    <input type="password" id="password" name="password" class="form-control" placeholder="Password">
-                    <i class="fa-regular fa-eye toggle-password" data-target="password"></i>
+                        <input type="password" id="password" name="password" class="form-control"
+                            placeholder="Password">
+                        <i class="fa-regular fa-eye toggle-password" data-target="password"></i>
                     </div>
 
                     <div class="password-box">
-                        <input type="password" id="confirm-password" name="Confirm_password" class="form-control" placeholder="Confirm password">
+                        <input type="password" id="confirm-password" name="Confirm_password" class="form-control"
+                            placeholder="Confirm password">
                         <i class="fa-regular fa-eye toggle-password" data-target="confirm-password"></i>
                     </div>
 
-                <div id="password-rules" class="password-rules">
-                    <h6>Password Requirements</h6>
+                    <div id="password-rules" class="password-rules">
+                        <h6>Password Requirements</h6>
 
-                    <small id="length">❌ At least 8 characters</small>
-                    <small id="upper">❌ One uppercase letter</small>
-                    <small id="lower">❌ One lowercase letter</small>
-                    <small id="number">❌ One number</small>
-                    <small id="special">❌ One special character</small>
-                </div>
+                        <small id="length">❌ At least 8 characters</small>
+                        <small id="upper">❌ One uppercase letter</small>
+                        <small id="lower">❌ One lowercase letter</small>
+                        <small id="number">❌ One number</small>
+                        <small id="special">❌ One special character</small>
+                    </div>
 
                     <p>Already have an account? <a href="/login">Login</a></p>
 
@@ -76,11 +77,11 @@
     <script src="/js/form-loader.js"></script>
 
     <script>
-    setupLoadingButton(
-        "registerForm",
-        "registerBtn",
-        "Creating Account..."
-    );
+        setupLoadingButton(
+            "registerForm",
+            "registerBtn",
+            "Creating Account..."
+        );
     </script>
 
 </body>

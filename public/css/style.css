@@ -51,18 +51,6 @@ main {
     justify-content:center;
 }
 
-/* .login-container ,.register-container {
-    margin: 0 15px;
-} */
-
-/* .toast-container {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 9999;
-} */
-
 .form-box {
     width: 100%;
     max-width: 550px;
@@ -73,7 +61,6 @@ main {
 }
 
 h1,h2,h3,h4,h5,h6 {
-    /* font-size: 34px; */
     text-align: center;
     margin: 20px;
 }

@@ -1,21 +1,18 @@
 <body class="nav-body">
   <main>
     <nav class="nav">
-  <ul>
+      <ul>
 
-    {{#if user}}
-
-
+        {{#if user}}
         <li class="{{#if isDashboard}}active{{/if}}">
-            <a href="/dashboard">Dashboard</a>
+          <a href="/dashboard">Dashboard</a>
         </li>
 
         <li>
           <a href="/logout">Logout</a>
         </li>
 
-    {{else}}
-      
+        {{else}}
 
         <li class="{{#if isLogin}}active{{/if}}">
           <a href="/login">Login</a>
@@ -25,9 +22,9 @@
           <a href="/register">Register</a>
         </li>
 
-    {{/if}}
+        {{/if}}
 
-  </ul>
-</nav>
+      </ul>
+    </nav>
   </main>
 </body>

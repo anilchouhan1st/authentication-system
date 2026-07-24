@@ -3,7 +3,6 @@ const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const db = require("../db");
 const transporter = require("../config/mail");
-// const resend = require("../config/mail");
 
 exports.protect = (req, res, next) => {
 
@@ -42,7 +41,7 @@ exports.verifyEmail = async (req, res) => {
             }
 
             if (results.length === 0) {
-                return res.render("auth-status", {                    
+                return res.render("auth-status", {
                     type: "error",
                     title: "❌ Verification Failed",
                     message: "This verification link is invalid or has expired.",
@@ -103,7 +102,7 @@ exports.verifyEmail = async (req, res) => {
 };
 
 exports.register = (req, res) => {
-    
+
 
     const { name, email, password, Confirm_password } = req.body;
 
@@ -163,14 +162,12 @@ exports.register = (req, res) => {
             } else {
                 console.log(result);
 
-                const verificationLink =`${process.env.BASE_URL}/auth/verify/${verificationToken}`;
+                const verificationLink = `${process.env.BASE_URL}/auth/verify/${verificationToken}`;
 
-                // await resend.emails.send({
                 try {
                     await transporter.sendMail({
                         from: process.env.EMAIL_FROM,
                         to: email,
-                        // to: "anilchouhan.dev@gmail.com",
                         subject: "Verify Your Email",
                         html: `
                         <h2>Welcome ${name}!</h2>
@@ -189,10 +186,10 @@ exports.register = (req, res) => {
 
                         <p>This link expires in 1 hour.</p>
                     `
-                });
-            } catch (error) {
-                console.error("Email send failed:", error);
-            }
+                    });
+                } catch (error) {
+                    console.error("Email send failed:", error);
+                }
 
                 return res.render("register", {
                     toast: {
@@ -266,7 +263,6 @@ exports.login = (req, res) => {
                 });
             }
 
-            // Generate JWT Token
             const token = jwt.sign(
                 { id: user.id },
                 process.env.JWT_SECRET,
@@ -279,8 +275,6 @@ exports.login = (req, res) => {
                 secure: process.env.NODE_ENV === "production"
             });
 
-
-            // res.redirect("/dashboard");
             res.redirect("/dashboard?welcome=true");
         }
     );
@@ -357,22 +351,20 @@ exports.forgotPassword = async (req, res) => {
 
                             <p>If you didn't request a password reset, you can safely ignore this email.</p>
                         `
-                    });
+                        });
 
-                    res.render("auth-status", {
-                        type: "info",
-                        title: "📧 Check Your Email",
-                        message: "We've sent you a password reset link.",
-                        buttonText: "Back to Login",
-                        buttonLink: "/login"
-                    });
+                        res.render("auth-status", {
+                            type: "info",
+                            title: "📧 Check Your Email",
+                            message: "We've sent you a password reset link.",
+                            buttonText: "Back to Login",
+                            buttonLink: "/login"
+                        });
 
-                } catch (error) {
-                    console.error("Email send failed:", error);
-                }
-            });
-
-            // res.send(results);
+                    } catch (error) {
+                        console.error("Email send failed:", error);
+                    }
+                });
 
         }
     );
@@ -525,89 +517,6 @@ exports.changePasswordPage = (req, res) => {
     });
 };
 
-// exports.changePassword = async (req, res) => {
-
-//     try{
-//         const { currentPassword, password, confirmPassword } = req.body;
-
-//     if (password !== confirmPassword) {
-//         return res.render("change-password", {
-//             toast: {
-//                     type: "error",
-//                     title: "Error",
-//                     message: "Passwords do not match."
-//                 }
-//         });
-//     }
-
-//     const [rows] = await db.query(
-//         "SELECT password FROM users WHERE id = ?",
-//         [req.user.id]
-//     );
-
-//     const user = rows[0];
-
-//     const match = await bcrypt.compare(
-//         currentPassword,
-//         user.password
-//     );
-
-//     if (!match) {
-//         return res.render("change-password", {
-//             toast: {
-//                         type: "error",
-//                         title: "Error",
-//                         message: "Current password is incorrect"
-//                     }
-//         });
-//     }
-    
-//     const passwordRegex =
-//             /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
-
-//         if (!passwordRegex.test(password)) {
-//             return res.render("change-password", {
-
-//                 toast: {
-//                     type: "warning",
-//                     title: "Weak Password",
-//                     message: "Password does not meet the required criteria."
-//                 }
-//             });
-//         }
-
-//     const samePassword = await bcrypt.compare(password, user.password);
-
-//     if (samePassword) {
-//         return res.render("change-password", {
-//         toast: {
-//             type: "warning",
-//             title: "Same Password",
-//             message: "New password must be different from your current password."
-//         }
-//         });
-//     }
-
-//     const hashedPassword = await bcrypt.hash(password, 8);
-
-//     await db.query(
-//         "UPDATE users SET password = ? WHERE id = ?",
-//         [hashedPassword, req.user.id]
-//     );
-
-//     res.redirect("/dashboard");
-//     } catch (err) {
-//         console.error(err);
-
-//         return res.render("change-password", {
-//             toast: {
-//                 type: "error",
-//                 title: "Server Error",
-//                 message: "Something went wrong. Please try again."
-//             }
-//         });
-//     }
-// };
 exports.changePassword = (req, res) => {
     const { currentPassword, password, confirmPassword } = req.body;
 
@@ -698,7 +607,7 @@ exports.changePassword = (req, res) => {
                         });
                     }
 
-                   return res.redirect("/dashboard?passwordChanged=true");
+                    return res.redirect("/dashboard?passwordChanged=true");
                 }
             );
 

@@ -1,9 +1,7 @@
-const express =require("express");
+const express = require("express");
 const db = require("../db");
 const authController = require("../controllers/auth");
-
-const router=express.Router();
-
+const router = express.Router();
 const jwt = require("jsonwebtoken");
 
 router.get("/", (req, res) => {
@@ -26,8 +24,6 @@ router.get("/forgot-password", (req, res) => {
     res.render("forgot-password");
 });
 
-
-
 router.get("/dashboard", authController.protect, (req, res) => {
 
     db.query(
@@ -48,7 +44,7 @@ router.get("/dashboard", authController.protect, (req, res) => {
                     message: `Welcome back, ${results[0].name}!`
                 };
             }
-            
+
             if (req.query.passwordChanged === "true") {
                 toast = {
                     type: "success",

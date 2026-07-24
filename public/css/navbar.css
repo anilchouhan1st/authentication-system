@@ -217,9 +217,8 @@ main header h2 {
 }
 
 .nav-wrapper {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
-

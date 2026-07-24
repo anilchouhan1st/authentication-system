@@ -24,18 +24,9 @@ password.addEventListener("input", () => {
     updateRule("lower", /[a-z]/.test(value));
     updateRule("number", /[0-9]/.test(value));
     updateRule("special", /[^A-Za-z0-9]/.test(value));
-
-    // if (allValid(value)) {
-    //     setTimeout(() => {
-    //         rules.style.display = "none";
-    //     }, 1000);
-    // } else {
-    //     rules.style.display = "block";
-    // }
-
     if (!allValid(value)) {
-    rules.style.display = "block";
-}
+        rules.style.display = "block";
+    }
 
 });
 

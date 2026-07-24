@@ -14,12 +14,12 @@
 
 {{#if toast}}
 <script>
-window.addEventListener("DOMContentLoaded", () => {
-    showToast(
-        "{{toast.type}}",
-        "{{toast.title}}",
-        "{{toast.message}}"
-    );
-});
+    window.addEventListener("DOMContentLoaded", () => {
+        showToast(
+            "{{toast.type}}",
+            "{{toast.title}}",
+            "{{toast.message}}"
+        );
+    });
 </script>
 {{/if}}
