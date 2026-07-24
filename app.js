@@ -9,7 +9,7 @@ const hbs = require("hbs");
 
 const app = express();
 const db = require("./db");
-
+app.set("trust proxy", 1);
 app.use(cookieParser());
 
 hbs.registerPartials(
