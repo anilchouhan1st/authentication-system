@@ -69,7 +69,7 @@
                         </div>
                         <div class="info-row">
                             <span class="info-label"><i class="fa-solid fa-calendar-days"></i> Member since</span>
-                            <span class="info-value">{{user.created_at}}</span>
+                            <span class="info-value">{{user.memberSince}}</span>
                         </div>
                         <div class="info-row">
                             <span class="info-label"><i class="fa-solid fa-circle-check"></i> Verification</span>
@@ -165,7 +165,7 @@
                         </div>
                         <div class="stat-pill">
                             <span class="stat-label">Member since</span>
-                            <strong>{{user.created_at}}</strong>
+                            <strong>{{user.memberSince}}</strong>
                         </div>
                         <div class="stat-pill">
                             <span class="stat-label">Method</span>
@@ -183,17 +183,6 @@
     <script src="/js/navbar.js"></script>
 
     <script>
-        const dashboardDate = document.getElementById("dashboardDate");
-        if (dashboardDate) {
-            const today = new Date();
-            dashboardDate.textContent = today.toLocaleDateString("en", {
-                weekday: "short",
-                month: "short",
-                day: "numeric",
-                year: "numeric"
-            });
-        }
-
         if (window.location.search.includes("welcome=true")) {
             window.history.replaceState({}, document.title, "/dashboard");
         }

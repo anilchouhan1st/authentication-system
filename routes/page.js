@@ -35,13 +35,22 @@ router.get("/dashboard", authController.protect, (req, res) => {
                 return res.redirect("/login");
             }
 
+            const user = results[0];
+
+            // Format the date
+            user.memberSince = new Date(user.created_at).toLocaleDateString("en-IN", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+            });
+
             let toast = null;
 
             if (req.query.welcome === "true") {
                 toast = {
                     type: "success",
                     title: "Login Successful",
-                    message: `Welcome back, ${results[0].name}!`
+                    message: `Welcome back, ${user.name}!`
                 };
             }
 
