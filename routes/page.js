@@ -76,7 +76,9 @@ router.get("/logout", (req, res) => {
 
     res.clearCookie("jwt");
 
-    res.redirect("/login");
+    res.redirect(
+        "/login?toast=logout"
+    );
 });
 
 module.exports = router;

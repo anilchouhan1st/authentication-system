@@ -49,4 +49,17 @@ function showToast(type, title, message) {
         clearTimeout(timer1);
         clearTimeout(timer2);
     };
+
+    
+
+}
+
+const params = new URLSearchParams(window.location.search);
+
+if (params.get("toast") === "logout") {
+    showToast(
+        "warning",
+        "Logged Out",
+        "You have been logged out successfully."
+    );
 }
